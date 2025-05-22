@@ -58,4 +58,5 @@ const ChatItem = (props) => {
   );
 };
 
-export default memo(ChatItem);
+const MemoizedChatItem = memo(ChatItem);
+export default MemoizedChatItem;

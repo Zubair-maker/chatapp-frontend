@@ -2,12 +2,14 @@ import { Grid } from "@mui/material";
 import Title from "../shared/Title";
 import Header from "./Header";
 import ChartList from "../specific/ChartList";
-import { samepleChats } from "../../constants/sampleData";
+import { samepleChats, sampleUsers } from "../../constants/sampleData";
 import { useParams } from "react-router-dom";
+import Profile from "../specific/Profile";
 
 const AppLayout = () => (WrappedComponent) => {
   // eslint-disable-next-line react/display-name
   return (props) => {
+    
     const params = useParams();
     const chatId = params.chatId;
 
@@ -57,7 +59,7 @@ const AppLayout = () => (WrappedComponent) => {
               bgcolor: "rgba(0,0,0,0.85)",
             }}
           >
-            {/* <Profile user={user} /> */}
+            <Profile sampleUsers={sampleUsers}/>
           </Grid>
         </Grid>
       </>

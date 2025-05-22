@@ -6,5 +6,5 @@ const Home = () => {
   return <div>Home</div>;
 };
 
-// const Home = AppLayout(Home);
-export default AppLayout()(Home);
+const WrappedHome = AppLayout()(Home);
+export default WrappedHome;

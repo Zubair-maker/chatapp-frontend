@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 import { lazy, Suspense, useState } from "react";
 
 const SearchDialog = lazy(() => import("../specific/Search"));
-const NotificationDialog = lazy(() => import("../specific/Notificatin"));
+const NotificationDialog = lazy(() => import("../specific/Notification"));
 const NewGroupDialog = lazy(() => import("../specific/NewGroup"));
 
 const Header = () => {

@@ -1,7 +1,7 @@
 export const samepleChats = [
   {
     avatar: ["https://www.w3schools.com/howto/img_avatar.png"],
-    name: "John Doe",
+    name: "Alice Smith",
     _id: "1",
     groupChat: false,
     members: ["1", "2"],
@@ -12,7 +12,7 @@ export const samepleChats = [
       "https://www.w3schools.com/howto/img_avatar.png",
       "https://www.w3schools.com/howto/img_avatar.png",
     ],
-    name: "John Boi",
+    name: "Team Alpha",
     _id: "2",
     groupChat: true,
     members: ["1", "2"],
@@ -22,12 +22,12 @@ export const samepleChats = [
 export const sampleUsers = [
   {
     avatar: "https://www.w3schools.com/howto/img_avatar.png",
-    name: "John Doe",
+    name: "Alice Smith",
     _id: "1",
   },
   {
     avatar: "https://www.w3schools.com/howto/img_avatar.png",
-    name: "John Boi",
+    name: "Bob Johnson",
     _id: "2",
   },
 ];
@@ -36,14 +36,14 @@ export const sampleNotifications = [
   {
     sender: {
       avatar: "https://www.w3schools.com/howto/img_avatar.png",
-      name: "John Doe",
+      name: "Alice Smith",
     },
     _id: "1",
   },
   {
     sender: {
       avatar: "https://www.w3schools.com/howto/img_avatar.png",
-      name: "John Boi",
+      name: "Bob Johnson",
     },
     _id: "2",
   },
@@ -52,14 +52,14 @@ export const sampleNotifications = [
 export const sampleMessage = [
   {
     attachments: [],
-    content: "L*uda ka Message hai",
+    content: "Hello, how are you?",
     _id: "sfnsdjkfsdnfkjsbnd",
     sender: {
-      _id: "user._id",
-      name: "Chaman ",
+      _id: "sender._id",
+      name: "Charlie Adams",
     },
     chat: "chatId",
-    createdAt: "2024-02-12T10:41:30.630Z",
+    createdAt: "2025-02-12T10:41:30.630Z",
   },
 
   {
@@ -69,32 +69,32 @@ export const sampleMessage = [
         url: "https://www.w3schools.com/howto/img_avatar.png",
       },
     ],
-    content: "",
+    content: "Check this out!",
     _id: "sfnsdjkfsdnfkdddjsbnd",
     sender: {
-      _id: "sdfsdfsdf",
-      name: "Chaman  2",
+      _id: "abcdefg",
+      name: "Charlie Adams",
     },
     chat: "chatId",
-    createdAt: "2024-02-12T10:41:30.630Z",
+    createdAt: "2025-02-12T10:41:30.630Z",
   },
 ];
 
 export const dashboardData = {
   users: [
     {
-      name: "John Doe",
+      name: "Alice Smith",
       avatar: "https://www.w3schools.com/howto/img_avatar.png",
       _id: "1",
-      username: "john_doe",
+      username: "alice_smith",
       friends: 20,
       groups: 5,
     },
     {
-      name: "John Boi",
+      name: "Bob Johnson",
       avatar: "https://www.w3schools.com/howto/img_avatar.png",
       _id: "2",
-      username: "john_boi",
+      username: "bob_johnson",
       friends: 20,
       groups: 25,
     },
@@ -102,7 +102,7 @@ export const dashboardData = {
 
   chats: [
     {
-      name: "LabadBass Group",
+      name: "Project Team",
       avatar: ["https://www.w3schools.com/howto/img_avatar.png"],
       _id: "1",
       groupChat: false,
@@ -113,12 +113,12 @@ export const dashboardData = {
       totalMembers: 2,
       totalMessages: 20,
       creator: {
-        name: "John Doe",
+        name: "Alice Smith",
         avatar: "https://www.w3schools.com/howto/img_avatar.png",
       },
     },
     {
-      name: "L*Da Luston Group",
+      name: "Dev Group",
       avatar: ["https://www.w3schools.com/howto/img_avatar.png"],
       _id: "2",
       groupChat: true,
@@ -129,7 +129,7 @@ export const dashboardData = {
       totalMembers: 2,
       totalMessages: 20,
       creator: {
-        name: "John Boi",
+        name: "Bob Johnson",
         avatar: "https://www.w3schools.com/howto/img_avatar.png",
       },
     },
@@ -138,11 +138,11 @@ export const dashboardData = {
   messages: [
     {
       attachments: [],
-      content: "L*uda ka Message hai",
+      content: "Welcome to the team!",
       _id: "sfnsdjkfsdnfkjsbnd",
       sender: {
         avatar: "https://www.w3schools.com/howto/img_avatar.png",
-        name: "Chaman ",
+        name: "Charlie Adams",
       },
       chat: "chatId",
       groupChat: false,
@@ -156,11 +156,11 @@ export const dashboardData = {
           url: "https://www.w3schools.com/howto/img_avatar.png",
         },
       ],
-      content: "",
+      content: "Here is the document.",
       _id: "sfnsdjkfsdnfkdddjsbnd",
       sender: {
         avatar: "https://www.w3schools.com/howto/img_avatar.png",
-        name: "Chaman  2",
+        name: "Charlie Adams",
       },
       chat: "chatId",
       groupChat: true,
