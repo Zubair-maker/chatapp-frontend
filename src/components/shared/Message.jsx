@@ -1,6 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import moment from "moment";
 import React, { memo } from "react";
+import { fileFormat } from "../../lib/feature";
+import DisplayAttachmentFile from "../shared/DisplayAttachmentFile";
 
 const Message = (props) => {
   console.log("Chat->Message", props);
@@ -25,16 +27,21 @@ const Message = (props) => {
 
       {attachments.length > 0 &&
         attachments.map((attachment, i) => {
+          const url = attachment.url;
+          const file = fileFormat(url);
           return (
             <Box key={i}>
               <a
-                href=""
+                href={url}
                 target="_blank"
+                rel="noopener noreferre"
                 download
                 style={{
                   color: "black",
                 }}
-              ></a>
+              >
+                {DisplayAttachmentFile(file, url)}
+              </a>
             </Box>
           );
         })}
