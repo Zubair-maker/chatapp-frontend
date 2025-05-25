@@ -10,16 +10,23 @@ import {
 } from "@mui/material";
 import { CameraAlt as CameraAltIcon } from "@mui/icons-material";
 import { useState } from "react";
-import useInput from "../hooks/inputHook";
 import { VisuallyHiddenInput } from "../components/styles/StyleComponent";
+import axios from "axios";
+import { server } from "../config/server";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { userExist } from "../redux/reducers/authSlice";
+import { useForm } from "react-hook-form";
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [islogin, setIsLogin] = useState(true);
-
-  const username = useInput();
-  const password = useInput();
-  const name = useInput();
-  const bio = useInput();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
 
   const [avatar, setAvatar] = useState({
     field: null,
@@ -43,16 +50,68 @@ const Login = () => {
     setIsLogin((prev) => !prev);
   };
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-
-    console.log("Login Payload:", {
-      username: username.value,
-      password: password.value,
-    });
+  const handleLogin = async (data) => {
+    // e.preventDefault();
+    const config = {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    try {
+      const resp = await axios.post(
+        `${server}/api/v1/user/login`,
+        {
+          username: data.username,
+          password: data.password,
+        },
+        config
+      );
+      dispatch(userExist(resp));
+      toast.success(resp.data.message);
+      reset();
+    } catch (error) {
+      console.log(error.message);
+      toast.error(error.response.resp.message);
+    }
   };
 
-  const handleSignUp = () => {};
+  const handleSignUp = async (formDataValues) => {
+    const { name, bio, username, password } = formDataValues;
+    console.log(formDataValues, avatar);
+
+    if (!avatar.file) {
+      toast.error("Please upload an avatar image");
+      return;
+    }
+    const formData = new FormData();
+    formData.append("avatar", avatar.file);
+    formData.append("name", name);
+    formData.append("bio", bio);
+    formData.append("username", username);
+    formData.append("password", password);
+
+    const config = {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+
+    try {
+      const resp = await axios.post(
+        `${server}/api/v1/user/create-user`,
+        formData,
+        config
+      );
+      toast.success("Signed up successfully!");
+      reset();
+      setAvatar({ file: null, preview: "", error: "" });
+    } catch (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  };
+
   return (
     <div>
       <Container
@@ -82,29 +141,37 @@ const Login = () => {
                   width: "100%",
                   marginTop: "10px",
                 }}
-                onSubmit={handleLogin}
+                onSubmit={handleSubmit(handleLogin)}
               >
                 <TextField
-                  required
                   fullWidth
                   label="Username"
                   margin="normal"
                   variant="outlined"
-                  value={username.value}
-                  onChange={username.inputChangeHadler}
+                  {...register("username", {
+                    required: "UserName is required",
+                  })}
                 />
-
+                {errors.username && (
+                  <Typography color="error" variant="caption">
+                    {errors.username.message}
+                  </Typography>
+                )}
                 <TextField
-                  required
                   fullWidth
                   label="Password"
                   type="password"
                   margin="normal"
                   variant="outlined"
-                  value={password.value}
-                  onChange={password.inputChangeHadler}
+                  {...register("password", {
+                    required: "Password is required",
+                  })}
                 />
-
+                {errors.password && (
+                  <Typography color="error" variant="caption">
+                    {errors.password.message}
+                  </Typography>
+                )}
                 <Button
                   sx={{
                     marginTop: "1rem",
@@ -113,7 +180,7 @@ const Login = () => {
                   color="primary"
                   type="submit"
                   fullWidth
-                  disabled={"isLoading"}
+                  // disabled={"isLoading"}
                 >
                   Login
                 </Button>
@@ -140,7 +207,7 @@ const Login = () => {
                   width: "100%",
                   marginTop: "1rem",
                 }}
-                onSubmit={handleSignUp}
+                onSubmit={handleSubmit(handleSignUp)}
               >
                 <Stack position={"relative"} width={"10rem"} margin={"auto"}>
                   <Avatar
@@ -190,51 +257,62 @@ const Login = () => {
                 )}
 
                 <TextField
-                  required
                   fullWidth
                   label="Name"
                   margin="normal"
                   variant="outlined"
-                  value={name.value}
-                  onChange={name.inputChangeHadler}
+                  {...register("name", {
+                    required: "Name is required",
+                  })}
                 />
-
+                {errors.name && (
+                  <Typography color="error" variant="caption">
+                    {errors.name.message}
+                  </Typography>
+                )}
                 <TextField
-                  required
                   fullWidth
                   label="Bio"
                   margin="normal"
                   variant="outlined"
-                  value={bio.value}
-                  onChange={bio.inputChangeHadler}
+                  {...register("bio", {
+                    required: "Bio is required",
+                  })}
                 />
+                {errors.bio && (
+                  <Typography color="error" variant="caption">
+                    {errors.bio.message}
+                  </Typography>
+                )}
                 <TextField
-                  required
                   fullWidth
                   label="Username"
                   margin="normal"
                   variant="outlined"
-                  value={username.value}
-                  onChange={username.inputChangeHadler}
+                  {...register("username", {
+                    required: "UserName is required",
+                  })}
                 />
-
-                {username.error && (
+                {errors.username && (
                   <Typography color="error" variant="caption">
-                    {username.error}
+                    {errors.username.message}
                   </Typography>
                 )}
-
                 <TextField
-                  required
                   fullWidth
                   label="Password"
                   type="password"
                   margin="normal"
                   variant="outlined"
-                  value={password.value}
-                  onChange={password.inputChangeHadler}
+                  {...register("password", {
+                    required: "Password is required",
+                  })}
                 />
-
+                {errors.password && (
+                  <Typography color="error" variant="caption">
+                    {errors.password.message}
+                  </Typography>
+                )}
                 <Button
                   sx={{
                     marginTop: "1rem",
