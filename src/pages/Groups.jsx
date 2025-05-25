@@ -19,9 +19,12 @@ import {
 } from "@mui/icons-material";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { memo, useEffect, useState } from "react";
-import { samepleChats } from "../constants/sampleData";
+import { samepleChats, sampleUsers } from "../constants/sampleData";
 import { Link } from "../components/styles/StyleComponent";
 import AvatarCard from "../components/shared/AvatarCard";
+import DeleteDialog from "../components/dialog/DeleteDialog";
+import AddMemberDialog from "../components/dialog/AddMemberDialog";
+import UserItem from "../components/shared/UserItem";
 
 const Groups = () => {
   const navigate = useNavigate();
@@ -33,6 +36,7 @@ const Groups = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [groupName, setGroupName] = useState("");
   const [groupNameUpdatedValue, setGroupNameUpdatedValue] = useState("");
+  const [deleteDialog, setDeleteDialog] = useState(false);
 
   const handleMobile = () => {
     setIsMobileMenuOpen((prev) => !prev);
@@ -49,17 +53,34 @@ const Groups = () => {
     console.log(groupNameUpdatedValue);
   };
 
-  const openConfirmDeleteHandler = () => {};
+  const openDeleteHandler = () => {
+    setDeleteDialog(true);
+  };
 
-  const closeConfirmDeleteHandler = () => {};
+  const closeDeleteHandler = () => {
+    setDeleteDialog(false);
+  };
+
+  const handleDeleteGroup = () => {
+    console.log("handleDelete");
+    setDeleteDialog(false);
+    navigate("/groups");
+  };
 
   const openAddMemberHandler = () => {
     console.log("object");
   };
 
+  const removeMemberHandler = (id) => {
+    console.log("object", id);
+  };
+  const isAddMember = false;
+
   useEffect(() => {
-    setGroupName(`Group name ${chatId}`);
-    setGroupNameUpdatedValue(`Group name ${chatId}`);
+    if (chatId) {
+      setGroupName(`Group name ${chatId}`);
+      setGroupNameUpdatedValue(`Group name ${chatId}`);
+    }
 
     return () => {
       setGroupName("");
@@ -141,9 +162,7 @@ const Groups = () => {
       ) : (
         <>
           <Typography variant="h4">{groupName}</Typography>
-          <IconButton
-            onClick={() => setIsEdit(true)}
-          >
+          <IconButton onClick={() => setIsEdit(true)}>
             <EditIcon />
           </IconButton>
         </>
@@ -168,7 +187,7 @@ const Groups = () => {
         size="large"
         color="error"
         startIcon={<DeleteIcon />}
-        onClick={openConfirmDeleteHandler}
+        onClick={openDeleteHandler}
       >
         Delete Group
       </Button>
@@ -238,13 +257,35 @@ const Groups = () => {
               height={"50vh"}
               overflow={"auto"}
             >
-              {/* Members */}
+              {sampleUsers.map((i) => (
+                <UserItem
+                  user={i}
+                  key={i._id}
+                  isMemberAdded
+                  handler={removeMemberHandler}
+                />
+              ))}
             </Stack>
 
             {ButtonGroup}
           </>
         )}
       </Grid>
+
+      {isAddMember && (
+        <>
+          <AddMemberDialog chatId={chatId} />
+        </>
+      )}
+      {deleteDialog && (
+        <>
+          <DeleteDialog
+            open={deleteDialog}
+            handleClose={closeDeleteHandler}
+            handleDelete={handleDeleteGroup}
+          />
+        </>
+      )}
     </Grid>
   );
 };

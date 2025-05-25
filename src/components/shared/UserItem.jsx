@@ -39,7 +39,7 @@ const UserItem = (props) => {
               bgcolor: props.isMemberAdded ? "error.dark" : "primary.dark",
             },
           }}
-          onClick={() => props.handler(props._id)}
+          onClick={() => props.handler(props.user._id)}
           disabled={props.handlerIsLoading}
         >
           {props.isMemberAdded ? <RemoveIcon /> : <AddIcon />}
