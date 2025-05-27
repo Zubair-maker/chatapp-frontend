@@ -1,4 +1,12 @@
 import {
+  Add as AddIcon,
+  Group as GroupIcon,
+  Logout as LogoutIcon,
+  Menu as MenuIcon,
+  Notifications as NotificationsIcon,
+  Search as SearchIcon,
+} from "@mui/icons-material";
+import {
   AppBar,
   Backdrop,
   Badge,
@@ -8,17 +16,14 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import {
-  Add as AddIcon,
-  Menu as MenuIcon,
-  Search as SearchIcon,
-  Group as GroupIcon,
-  Logout as LogoutIcon,
-  Notifications as NotificationsIcon,
-} from "@mui/icons-material";
-import { orange } from "../../constants/color";
-import { useNavigate } from "react-router-dom";
 import { lazy, Suspense, useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import api from "../../config/api";
+import { orange } from "../../constants/color";
+import { userNotExist } from "../../redux/reducers/authSlice";
+import { setIsMobile, setIsSearch } from "../../redux/reducers/uiSlice";
 
 const SearchDialog = lazy(() => import("../specific/Search"));
 const NotificationDialog = lazy(() => import("../specific/Notification"));
@@ -26,14 +31,20 @@ const NewGroupDialog = lazy(() => import("../specific/NewGroup"));
 
 const Header = () => {
   const navigate = useNavigate();
-  const [isSearch, setIsSearch] = useState(false);
+  const dispatch = useDispatch();
+
+  const { isSearch } = useSelector((state) => state.ui);
+
+  // const [isSearch, setIsSearch] = useState(false);
   const [isNotification, setisNotification] = useState(false);
   const [isNewGroup, setIsGroup] = useState(false);
 
-  const handleMobile = () => {};
+  const handleMobile = () => {
+    dispatch(setIsMobile(true));
+  };
 
   const openSearch = () => {
-    setIsSearch((prev) => !prev);
+    dispatch(setIsSearch(true));
   };
   const openNotification = () => {
     setisNotification((prev) => !prev);
@@ -43,7 +54,16 @@ const Header = () => {
     setIsGroup((prev) => !prev);
   };
 
-  const logoutHandler = () => {};
+  const logoutHandler = async () => {
+    try {
+      await api.get("user/logout");
+      toast.success("User logout successfully!");
+      dispatch(userNotExist());
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Somethng went wrong!");
+      console.log(error);
+    }
+  };
 
   const navigateToGroup = () => navigate("/groups");
   return (

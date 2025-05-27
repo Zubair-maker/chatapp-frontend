@@ -1,3 +1,4 @@
+import { CameraAlt as CameraAltIcon } from "@mui/icons-material";
 import {
   Avatar,
   Button,
@@ -8,15 +9,13 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { CameraAlt as CameraAltIcon } from "@mui/icons-material";
 import { useState } from "react";
-import { VisuallyHiddenInput } from "../components/styles/StyleComponent";
-import axios from "axios";
-import { server } from "../config/server";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
+import { VisuallyHiddenInput } from "../components/styles/StyleComponent";
+import api from "../config/api";
 import { userExist } from "../redux/reducers/authSlice";
-import { useForm } from "react-hook-form";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -42,7 +41,6 @@ const Login = () => {
       return;
     }
     const preview = URL.createObjectURL(file);
-    console.log("preview", preview);
     setAvatar({ file, preview, error: "" });
   };
 
@@ -51,22 +49,11 @@ const Login = () => {
   };
 
   const handleLogin = async (data) => {
-    // e.preventDefault();
-    const config = {
-      withCredentials: true,
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
     try {
-      const resp = await axios.post(
-        `${server}/api/v1/user/login`,
-        {
-          username: data.username,
-          password: data.password,
-        },
-        config
-      );
+      const resp = await api.post("user/login", {
+        username: data.username,
+        password: data.password,
+      });
       dispatch(userExist(resp));
       toast.success(resp.data.message);
       reset();
@@ -92,23 +79,19 @@ const Login = () => {
     formData.append("password", password);
 
     const config = {
-      withCredentials: true,
       headers: {
         "Content-Type": "multipart/form-data",
       },
     };
 
     try {
-      const resp = await axios.post(
-        `${server}/api/v1/user/create-user`,
-        formData,
-        config
-      );
+      await api.post(`user/create-user`, formData, config);
       toast.success("Signed up successfully!");
       reset();
       setAvatar({ file: null, preview: "", error: "" });
     } catch (error) {
-      toast.error(error?.response?.data?.message);
+      toast.error(error?.response?.data?.message || "Something went wrong");
+      console.error("Sign Up Error:", error);
     }
   };
 

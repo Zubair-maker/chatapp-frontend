@@ -2,11 +2,11 @@ import { Stack } from "@mui/material";
 import ChatItem from "../shared/ChatItem";
 
 const ChatList = (props) => {
-  console.log("AppLayout->ChatList", props);
+  console.log("AppLayout->ChatList");
 
   const newwMessagesAlert = [{ chatId: "1", count: 4 }];
   return (
-    <Stack width="100%" direction="column">
+    <Stack width={props.w} direction="column" overflow={"auto"}>
       {props.chats.map((data, index) => {
         const { avatar, groupChat, _id, name, members } = data;
         const newMessageAlert = newwMessagesAlert.find(

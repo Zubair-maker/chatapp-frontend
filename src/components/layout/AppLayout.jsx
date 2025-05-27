@@ -1,21 +1,37 @@
-import { Grid } from "@mui/material";
+/* eslint-disable react-hooks/rules-of-hooks */
+import { Drawer, Grid } from "@mui/material";
 import Title from "../shared/Title";
 import Header from "./Header";
 import ChartList from "../specific/ChartList";
 import { samepleChats, sampleUsers } from "../../constants/sampleData";
 import { useParams } from "react-router-dom";
 import Profile from "../specific/Profile";
+import { useMyChatsQuery } from "../../redux/rtk/api";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsMobile } from "../../redux/reducers/uiSlice";
+import { useErrors } from "../../hooks/hooks";
 
 const AppLayout = () => (WrappedComponent) => {
   // eslint-disable-next-line react/display-name
   return (props) => {
-    
     const params = useParams();
     const chatId = params.chatId;
+
+    const dispatch = useDispatch();
+    const { isMobile } = useSelector((state) => state.ui);
+    // console.log("isMobileMenu", isMobile);
+
+    const { isLoading, isError, data, error } = useMyChatsQuery("");
+    console.log("data", data);
+    useErrors([{ isError, error }]);
 
     const handleDeleteChat = (e, chatId, groupChat) => {
       e.preventDefault();
       console.log("delete,chat", chatId, groupChat);
+    };
+
+    const handleMobileClose = () => {
+      dispatch(setIsMobile(false));
     };
     return (
       <>
@@ -29,12 +45,15 @@ const AppLayout = () => (WrappedComponent) => {
             sx={{ display: { xs: "none", sm: "block" } }}
             height="100%"
           >
-            <ChartList
-              chats={samepleChats}
-              chatId={chatId}
-              onlineUsers={["1", "2"]}
-              handleDeleteChat={handleDeleteChat}
-            />
+            {isLoading ? (
+              <h3>Loading ChatsList..</h3>
+            ) : (
+              <ChartList
+                chats={data?.chats}
+                chatId={chatId}
+                handleDeleteChat={handleDeleteChat}
+              />
+            )}
           </Grid>
 
           <Grid
@@ -59,9 +78,22 @@ const AppLayout = () => (WrappedComponent) => {
               bgcolor: "rgba(0,0,0,0.85)",
             }}
           >
-            <Profile sampleUsers={sampleUsers}/>
+            <Profile sampleUsers={sampleUsers} />
           </Grid>
         </Grid>
+
+        {isLoading ? (
+          <h3>Loading ChatList</h3>
+        ) : (
+          <Drawer open={isMobile} onClose={handleMobileClose}>
+            <ChartList
+              w="70vw"
+              chats={data?.chats}
+              chatId={chatId}
+              handleDeleteChat={handleDeleteChat}
+            />
+          </Drawer>
+        )}
       </>
     );
   };
