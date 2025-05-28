@@ -22,10 +22,33 @@ const api = createApi({
       }),
       providesTags: ["User"],
     }),
+
+    sendFreindRequest: builder.mutation({
+      query: (data) => ({
+        url: "user/sendrequest",
+        method: "POST",
+        credentials: "include",
+        body: data,
+      }),
+      invalidatesTags: ["User"],
+    }),
+
+    getMyNotification: builder.query({
+      query: () => ({
+        url: "user/notifications",
+        credentials: "include",
+      }),
+      keepUnusedDataFor: 0,
+    }),
   }),
 });
 
 export default api;
-export const { useMyChatsQuery, useLazySearchUserQuery } = api;
+export const {
+  useMyChatsQuery,
+  useLazySearchUserQuery,
+  useSendFreindRequestMutation,
+  useGetMyNotificationQuery,
+} = api;
 
 //http://localhost:8081/api/v1/user/search?name=

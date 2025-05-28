@@ -23,7 +23,11 @@ import { useNavigate } from "react-router-dom";
 import api from "../../config/api";
 import { orange } from "../../constants/color";
 import { userNotExist } from "../../redux/reducers/authSlice";
-import { setIsMobile, setIsSearch } from "../../redux/reducers/uiSlice";
+import {
+  setIsMobile,
+  setIsNotification,
+  setIsSearch,
+} from "../../redux/reducers/uiSlice";
 
 const SearchDialog = lazy(() => import("../specific/Search"));
 const NotificationDialog = lazy(() => import("../specific/Notification"));
@@ -34,9 +38,10 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const { isSearch } = useSelector((state) => state.ui);
+  const { isNotication } = useSelector((state) => state.ui);
 
   // const [isSearch, setIsSearch] = useState(false);
-  const [isNotification, setisNotification] = useState(false);
+  // const [isNotification, setisNotification] = useState(false);
   const [isNewGroup, setIsGroup] = useState(false);
 
   const handleMobile = () => {
@@ -47,7 +52,7 @@ const Header = () => {
     dispatch(setIsSearch(true));
   };
   const openNotification = () => {
-    setisNotification((prev) => !prev);
+    dispatch(setIsNotification(true));
   };
 
   const openNewGroup = () => {
@@ -140,7 +145,7 @@ const Header = () => {
           <SearchDialog />
         </Suspense>
       )}
-      {isNotification && (
+      {isNotication && (
         <Suspense fallback={<Backdrop open />}>
           <NotificationDialog />
         </Suspense>

@@ -19,10 +19,11 @@ const AppLayout = () => (WrappedComponent) => {
 
     const dispatch = useDispatch();
     const { isMobile } = useSelector((state) => state.ui);
-    // console.log("isMobileMenu", isMobile);
+    const { user, loading} = useSelector((state) => state.auth);
+    console.log("user", user);
 
     const { isLoading, isError, data, error } = useMyChatsQuery("");
-    console.log("data", data);
+    // console.log("data", data);
     useErrors([{ isError, error }]);
 
     const handleDeleteChat = (e, chatId, groupChat) => {
@@ -78,7 +79,7 @@ const AppLayout = () => (WrappedComponent) => {
               bgcolor: "rgba(0,0,0,0.85)",
             }}
           >
-            <Profile sampleUsers={sampleUsers} />
+            <Profile user={user} loading={loading}/>
           </Grid>
         </Grid>
 

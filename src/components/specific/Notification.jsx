@@ -9,26 +9,36 @@ import {
   Typography,
 } from "@mui/material";
 import { memo } from "react";
-import { sampleNotifications } from "../../constants/sampleData";
+import { useErrors } from "../../hooks/hooks";
+import { useGetMyNotificationQuery } from "../../redux/rtk/api";
+import { useDispatch, useSelector } from "react-redux";
+import { setIsNotification } from "../../redux/reducers/uiSlice";
 
 const Notification = () => {
-  const isLoading = false;
+  const { isNotication } = useSelector((state) => state.ui);
+  const dispatch = useDispatch();
 
+  const { data, isLoading, isError, error } = useGetMyNotificationQuery();
+  console.log("isNotication", isNotication);
   const friendRequestHandler = ({ _id, accept }) => {
     console.log("friendRequestHandler", _id, accept);
   };
-
+  // console.log("useGetMyNotificationQuery", data?.request);
+  const closeNotifiction = () => {
+    dispatch(setIsNotification(false));
+  };
+  useErrors([{ error, isError }]);
   return (
-    <Dialog open>
+    <Dialog open={isNotication} onClose={closeNotifiction}>
       <Stack p={{ xs: "1rem", sm: "2rem" }} maxWidth={"25rem"}>
         <DialogTitle>Notifications</DialogTitle>
 
         {isLoading ? (
-          <Skeleton />
+          <h3>Loading...</h3>
         ) : (
           <>
-            {sampleNotifications?.length > 0 ? (
-              sampleNotifications?.map(({ sender, _id }) => (
+            {data?.request?.length > 0 ? (
+              data?.request?.map(({ sender, _id }) => (
                 <NotificationItem
                   sender={sender}
                   _id={_id}
@@ -56,7 +66,7 @@ const NotificationItem = memo(({ sender, _id, handler }) => {
         spacing={"1rem"}
         width={"100%"}
       >
-        <Avatar />
+        <Avatar src={avatar} />
 
         <Typography
           variant="body1"

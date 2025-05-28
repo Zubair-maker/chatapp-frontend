@@ -11,20 +11,38 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useDebouncedEffect } from "../../hooks/hooks";
 import { setIsSearch } from "../../redux/reducers/uiSlice";
-import { useLazySearchUserQuery } from "../../redux/rtk/api";
+import {
+  useLazySearchUserQuery,
+  useSendFreindRequestMutation,
+} from "../../redux/rtk/api";
 import UserItem from "../shared/UserItem";
+import toast from "react-hot-toast";
 
 const Search = () => {
   const { isSearch } = useSelector((state) => state.ui);
   const dispatch = useDispatch();
+
   const [searchUser] = useLazySearchUserQuery();
+
+  const [sendRequest] = useSendFreindRequestMutation();
 
   const [users, setUsers] = useState([]);
   console.log("users", users?.data);
   const [search, setSearch] = useState("");
 
   const addFriendHandler = async (id) => {
-    console.log("addFriendHandler", id);
+    try {
+      const resp = await sendRequest({ userId: id });
+      if (resp?.data) {
+        toast.success("Frriend request sent");
+        console.log("respfr", resp?.data);
+      } else {
+        toast.error(resp.error?.data?.message || "Friend request already sent");
+        console.log("errfr", resp.error?.data?.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const searchCloseHandler = () => {
@@ -45,6 +63,7 @@ const Search = () => {
   },[search],1000);
 
   let isLoadingSendFriendRequest = false;
+
   return (
     <Dialog open={isSearch} onClose={searchCloseHandler}>
       <Stack p={"2rem"} direction={"column"} width={"25rem"}>
@@ -75,7 +94,7 @@ const Search = () => {
                 user={i}
                 key={i._id}
                 handler={addFriendHandler}
-                handlerIsLoading={isLoadingSendFriendRequest}
+                // handlerIsLoading={isLoadingSendFriendRequest}
               />
             ))
           )}

@@ -8,9 +8,18 @@ import moment from "moment/moment";
 
 const Profile = (props) => {
   console.log("Applayout->Profile", props);
+
+  if (props?.isLoading || !props.user)
+    return (
+      <h3 style={{ color: "white", textAlign: "center" }}>
+        Loading Profile...
+      </h3>
+    );
+
   return (
     <Stack spacing={"2rem"} direction={"column"} alignItems={"center"}>
       <Avatar
+        src={props?.user?.image}
         sx={{
           width: "200px",
           height: "200px",
@@ -19,16 +28,20 @@ const Profile = (props) => {
           border: "5px solid white",
         }}
       />
-      <ProfileCard heading={"Bio"} text={"zubair khan"} />
+      <ProfileCard heading={"Bio"} text={props?.user?.bio} />
       <ProfileCard
-        heading={"Username"}
-        text={"Altaf"}
+        heading={"UserName"}
+        text={props?.user?.username}
         Icon={<UserNameIcon />}
       />
-      <ProfileCard heading={"Name"} text={"Mahim"} Icon={<FaceIcon />} />
+      <ProfileCard
+        heading={"Name"}
+        text={props?.user?.name}
+        Icon={<FaceIcon />}
+      />
       <ProfileCard
         heading={"Joined"}
-        text={moment('2025-05-20T18:30:00.000Z').fromNow()}
+        text={moment(props?.user?.createdAt).fromNow()}
         Icon={<CalendarIcon />}
       />
     </Stack>

@@ -14,33 +14,29 @@ const Groups = lazy(() => import("./pages/Groups"));
 // const user = true;
 
 const App = () => {
-  const { user } = useSelector((state) => state.auth);
+  const { user, loading } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    let isMounted = true;
     const getUserData = async () => {
       try {
         const resp = await api.get("user/me");
-        if (isMounted) {
-          dispatch(userExist(resp?.data?.data));
-        }
+        console.log("hhh", resp);
+        dispatch(userExist(resp?.data?.data));
       } catch (error) {
-        if (isMounted) {
-          dispatch(userNotExist());
-          toast.error(error.response?.data?.message);
-        }
+        dispatch(userNotExist());
+        toast.error(error.response?.data?.message);
       }
     };
 
     getUserData();
+  }, [dispatch]);
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  return (
+  return loading ? (
+    <>
+      <h2>Loading user data...</h2>
+    </>
+  ) : (
     <Suspense fallback={<h1>Loading...</h1>}>
       <BrowserRouter>
         <Routes>

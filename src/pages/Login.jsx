@@ -16,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { VisuallyHiddenInput } from "../components/styles/StyleComponent";
 import api from "../config/api";
 import { userExist } from "../redux/reducers/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -54,12 +55,11 @@ const Login = () => {
         username: data.username,
         password: data.password,
       });
-      dispatch(userExist(resp));
-      toast.success(resp.data.message);
-      reset();
+      dispatch(userExist(resp?.data?.user));
+      toast.success(resp?.data.message);
     } catch (error) {
       console.log(error.message);
-      toast.error(error.response.resp.message);
+      toast.error(error?.response?.data?.message || "Something Went Wrong");
     }
   };
 
